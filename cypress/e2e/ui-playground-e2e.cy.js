@@ -34,8 +34,10 @@ describe('Test all UI components listed on the homepage', () => {
       });
   });
 
-  it('Dynamic ID', () => {
-    
+  it.only('Dynamic ID', () => {
+    cy.get('a').contains('Dynamic ID').click();
+    cy.url().should('include', '/dynamicid');
+    cy.get('.btn').contains('Button with Dynamic ID').click();
   });
 
 });
