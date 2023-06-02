@@ -21,7 +21,17 @@ describe('Test all UI components listed on the homepage', () => {
   });
 
   it('Description header', () => {
+    // Assert the title has the correct text
+    cy.get('#title').should('have.text', 'UI Test AutomationPlayground');
 
+    // Check the image successfully loaded
+    cy.get('img')
+      .should('be.visible') // Image is visible 
+      .should('have.attr', 'src', '/static/cube.png') // assert src
+      .should('have.attr', 'alt', 'Responsive image') // assert alt
+      .and((img) => {
+        expect(img[0].naturalWidth).to.be.greaterThan(0); // Check if the image has been loaded successfully
+      });
   });
 
   it('Dynamic ID', () => {
