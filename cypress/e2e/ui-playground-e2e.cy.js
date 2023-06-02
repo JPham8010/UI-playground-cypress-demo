@@ -61,10 +61,45 @@ describe('Test all UI components listed on the homepage', () => {
     cy.get('#content').should('have.text', '\nData calculated on the client side.');
   });
 
-  it.only('Text Input', () => {
+  it('Text Input', () => {
     cy.get('a').contains('Text Input').click();
     cy.url().should('include', '/textinput');
     cy.get('input[type="text"]').type("test"); // Get text box by element's attr
     cy.get('#updatingButton').click().should('have.text', 'test');
+  });
+
+  it('Logging in', () => {
+    cy.get('a').contains('Sample App').click();
+    cy.url().should('include', '/sampleapp');
+
+    // Send a POST request with invalid credentials
+    cy.request({
+      method: 'POST',
+      url: 'http://uitestingplayground.com/api/login',
+      body: {
+        username: 'invalidUsername',
+        password: 'invalidPassword',
+      },
+      failOnStatusCode: false, // Allow the request to fail without throwing an error
+    }).then((response) => {
+      expect(response.status).to.equal(404); // Assert that the request was invalid (HTTP status code 404)
+    });
+
+    cy.get('input[name="UserName"]').type("test");
+    cy.get('input[name="Password"]').type("pwd");
+    cy.get('button[id="login"]').click();
+
+    cy.get('#loginstatus')
+      .should('have.attr', 'class', 'text-success')
+      .should('have.text', 'Welcome, test!');
+    cy.get('button[id="login"]').should('have.text', 'Log Out');
+    cy.get('button[id="login"]').click();
+
+    cy.get('#loginstatus')
+      .should('have.attr', 'class', 'text-info')
+      .should('have.text', 'User logged out.');
+    cy.get('input[name="UserName"]').should('have.value', '');
+    cy.get('input[name="Password"]').should('have.value', '');
+    cy.get('button[id="login"]').should('have.text', 'Log In');
   });
 });
