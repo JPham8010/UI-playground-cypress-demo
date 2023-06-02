@@ -40,10 +40,31 @@ describe('Test all UI components listed on the homepage', () => {
     cy.get('.btn').contains('Button with Dynamic ID').click();
   });
 
-  it.only('Load Delay', () => {
-    cy.get('a').contains('Load Delay').click();
-    cy.wait(3000);
+  it('Load Delay', () => {
+    cy.get('a').contains('Load Delay').click(); //Cypress automatically wait 4000ms for a response.
     cy.url().should('include', '/loaddelay');
   });
 
+  it('AJAX Data', () => {
+    cy.get('a').contains('AJAX Data').click();
+    cy.url().should('include', '/ajax');
+    cy.get('#ajaxButton').click();
+    cy.wait(15000);
+    cy.get('#content').should('have.text', '\nData loaded with AJAX get request.');
+  });
+
+  it('Client Side Delay', () => {
+    cy.get('a').contains('Client Side Delay').click();
+    cy.url().should('include', '/clientdelay');
+    cy.get('#ajaxButton').click();
+    cy.wait(15000);
+    cy.get('#content').should('have.text', '\nData calculated on the client side.');
+  });
+
+  it.only('Text Input', () => {
+    cy.get('a').contains('Text Input').click();
+    cy.url().should('include', '/textinput');
+    cy.get('input[type="text"]').type("test"); // Get text box by element's attr
+    cy.get('#updatingButton').click().should('have.text', 'test');
+  });
 });
