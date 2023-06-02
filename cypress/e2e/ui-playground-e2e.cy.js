@@ -34,10 +34,16 @@ describe('Test all UI components listed on the homepage', () => {
       });
   });
 
-  it.only('Dynamic ID', () => {
+  it('Dynamic ID', () => {
     cy.get('a').contains('Dynamic ID').click();
     cy.url().should('include', '/dynamicid');
     cy.get('.btn').contains('Button with Dynamic ID').click();
+  });
+
+  it.only('Load Delay', () => {
+    cy.get('a').contains('Load Delay').click();
+    cy.wait(3000);
+    cy.url().should('include', '/loaddelay');
   });
 
 });
